@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@200;300;400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700&display=swap");
 
 * {
   margin: 0;
@@ -18,13 +18,12 @@ body {
   overflow: hidden;
 }
 
-/* ✅ Same background as login page */
+/* ✅ Background image (same as login page) */
 body::before {
   content: "";
   position: absolute;
-  width: 100%;
-  height: 100%;
-  background: url("https://images.unsplash.com/photo-1675295275119-b3ffe5448c9c?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1026")
+  inset: 0;
+  background: url("https://images.unsplash.com/photo-1675295275119-b3ffe5448c9c?ixlib=rb-4.1.0&auto=format&fit=crop&w=1026&q=80")
     no-repeat center;
   background-position: center 35%;
   background-size: cover;
@@ -68,7 +67,7 @@ h2 {
   color: #fff;
   font-size: 16px;
   pointer-events: none;
-  transition: 0.15s ease;
+  transition: 0.2s ease;
 }
 
 .input-field input {
@@ -86,6 +85,7 @@ h2 {
   font-size: 0.8rem;
   top: 10px;
   transform: translateY(-120%);
+  color: #ddd;
 }
 
 button {
@@ -114,11 +114,12 @@ button:hover {
   color: #fff;
 }
 
-.wrapper a {
+.register a {
   color: #efefef;
   text-decoration: none;
+  transition: 0.2s;
 }
 
-.wrapper a:hover {
+.register a:hover {
   text-decoration: underline;
 }

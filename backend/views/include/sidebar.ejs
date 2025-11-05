@@ -1,0 +1,32 @@
+  <!-- Sidebar -->
+  <div id="sidebar" class="sidebar">
+    <div class="sidebar-content">
+      <div class="sidebar-header">
+        <img src="https://img.freepik.com/free-vector/blue-circle-with-white-user_78370-4707.jpg?semt=ais_hybrid&w=740" alt="User" class="sidebar-avatar" />
+        <h3 class="sidebar-name">User Name</h3>
+      </div>
+      <hr class="sidebar-line" />
+      <div class="sidebar-menu">
+        <p>👤 My Account</p>
+        <p>🎫 Requests</p>
+        <p>➡ Sign Out</p>
+      </div>
+    </div>
+  </div>
+
+
+    <script>
+    const userIcon = document.querySelector(".user-icon");
+    const sidebar = document.getElementById("sidebar");
+
+    userIcon.addEventListener("click", () => {
+      sidebar.classList.toggle("active");
+    });
+
+    // Optional: close sidebar when clicked outside
+    document.addEventListener("click", (e) => {
+      if (!sidebar.contains(e.target) && !userIcon.contains(e.target)) {
+        sidebar.classList.remove("active");
+      }
+    });
+  </script>

@@ -8,28 +8,30 @@
 </head>
 <body>
   <div class="wrapper">
-    <form action="#">
+    <form action="/watchlist/register" method="POST">
       <h2>Register</h2>
 
       <div class="input-field">
-        <input type="text" required>
+        <input type="text" name="name" required />
         <label>Create your username</label>
       </div>
 
       <div class="input-field">
-        <input type="email" required>
+        <input type="email" name="email" required />
         <label>Enter your email</label>
       </div>
 
       <div class="input-field">
-        <input type="password" required>
+        <input type="password" name="password" required />
         <label>Create your password</label>
       </div>
 
       <button type="submit">Register</button>
 
       <div class="register">
-        <p>Already have an account? <a href="http://localhost:3000/watchlist/login">Login</a></p>
+        <p>Already have an account? 
+          <a href="http://localhost:3000/watchlist/login">Login</a>
+        </p>
       </div>
     </form>
   </div>
