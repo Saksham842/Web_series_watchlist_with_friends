@@ -519,6 +519,35 @@ app.get('/watchlist/friends/requests', (req, res) => {
   });
 });
 
+// ✅ Remove / Unfriend a user
+app.delete('/watchlist/friends/remove/:friendId', (req, res) => {
+  if (!req.session.user) return res.status(401).json({ message: 'Unauthorized' });
+
+  const currentUserId = req.session.user.id;
+  const friendId = req.params.friendId;
+
+  const q = `
+    DELETE FROM friendships
+    WHERE 
+      (sender_id = ? AND receiver_id = ?)
+      OR (sender_id = ? AND receiver_id = ?)
+  `;
+
+  connection.query(q, [currentUserId, friendId, friendId, currentUserId], (err, result) => {
+    if (err) {
+      console.error('❌ Error removing friend:', err);
+      return res.status(500).json({ message: 'Error removing friend' });
+    }
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ message: 'Friendship not found' });
+    }
+
+    console.log(`✅ Friendship removed between ${currentUserId} and ${friendId}`);
+    res.json({ success: true, message: '✅ Friend removed successfully.' });
+  });
+});
+
 
 // ---------------------------------------------------------
 // ERROR HANDLING

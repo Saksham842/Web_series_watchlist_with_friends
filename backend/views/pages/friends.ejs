@@ -12,7 +12,8 @@
   <div class="find-page">
     <section class="hero">
       <div class="overlay"></div>
-      <img src="https://images.unsplash.com/photo-1593642532973-d31b6557fa68?auto=format&fit=crop&w=1400&q=80" class="bg-image" alt="Find Friends" />
+      <img src="https://images.unsplash.com/photo-1593642532973-d31b6557fa68?auto=format&fit=crop&w=1400&q=80"
+           class="bg-image" alt="Find Friends" />
       <div class="hero-content">
         <h1>🎥 Find New Friends</h1>
         <p>Connect with others and share your binge lists!</p>
@@ -51,20 +52,31 @@
 
   <script>
     async function sendRequest(receiverId, btn) {
-      btn.disabled = true;
-      btn.innerHTML = '<i class="fa-solid fa-hourglass-half"></i> Sending...';
+      try {
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fa-solid fa-hourglass-half"></i> Sending...';
 
-      const res = await fetch(`/friends/request/${receiverId}`, { method: 'POST' });
-      const data = await res.json();
+        const res = await fetch('/watchlist/friends/request', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ receiver_id: receiverId })
+        });
 
-      if (data.success) {
+        if (!res.ok) {
+          const text = await res.text();
+          throw new Error(`Server error: ${res.status} - ${text}`);
+        }
+
+        const data = await res.json();
+
         btn.innerHTML = '<i class="fa-solid fa-check"></i> Request Sent';
         btn.classList.add('sent');
-        showToast('✅ Friend request sent!');
-      } else {
+        showToast(data.message || '✅ Friend request sent!');
+      } catch (err) {
+        console.error('❌ Error sending request:', err);
         btn.disabled = false;
         btn.innerHTML = '<i class="fa-solid fa-user-plus"></i> Add Friend';
-        showToast('❌ Error sending request');
+        showToast('❌ Could not send friend request.');
       }
     }
 

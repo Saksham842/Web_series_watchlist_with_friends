@@ -13,7 +13,7 @@
       <h1>Pending Friend Requests</h1>
       <nav>
         <a href="/watchlist/friends" class="nav-btn">Find Friends</a>
-        <a href="/friends/list" class="nav-btn">My Friends</a>
+        <a href="/watchlist/friends/list" class="nav-btn">My Friends</a>
         <a href="/watchlist/home" class="nav-btn">Home</a>
       </nav>
     </header>
@@ -42,7 +42,7 @@
     document.querySelectorAll('.accept-btn').forEach(btn => {
       btn.addEventListener('click', async () => {
         const senderId = btn.dataset.id;
-        const res = await fetch('/friends/accept', {
+        const res = await fetch('/watchlist/friends/accept', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ sender_id: senderId })
