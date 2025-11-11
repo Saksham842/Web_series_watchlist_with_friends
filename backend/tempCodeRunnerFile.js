@@ -396,68 +396,6 @@ app.get("/watchlist/series/:id", (req, res) => {
 		});
 	});
 });
-// LIVE search results API (for dropdown)
-app.get("/api/search", (req, res) => {
-	const query = req.query.q;
-	if (!query || query.trim() === "") return res.json([]);
-
-	const sql = `
-		  SELECT 
-      s.series_id,
-      s.title,
-      s.poster_url,
-      s.series_rating,
-      GROUP_CONCAT(DISTINCT g.genre_name SEPARATOR ', ') AS genre_name
-    FROM series s
-    JOIN series_genres sg ON s.series_id = sg.series_id
-    JOIN genres g ON sg.genre_id = g.genre_id
-    WHERE s.title LIKE ?
-    GROUP BY s.series_id, s.title, s.poster_url, s.series_rating
-    ORDER BY s.series_rating DESC, s.title ASC
-    LIMIT 8;
-	`;
-
-	connection.query(sql, [`%${query}%`], (err, results) => {
-		if (err) {
-			console.error(err);
-			return res.status(500).json({ error: "Database error" });
-		}
-		res.json(results);
-	});
-});
-
-// FULL search page (for when user presses SEARCH)
-// Must be ABOVE the error handlers
-app.get("/watchlist/search", (req, res) => {
-	const query = req.query.q;
-	if (!query || query.trim() === "") {
-		return res.render("pages/search", { results: [], query: "" });
-	}
-
-	const sql = `
-	sELECT 
-			s.series_id, 
-			s.title, 
-			s.poster_url, 
-			s.series_rating, 
-			s.summary,
-			GROUP_CONCAT(g.genre_name SEPARATOR ', ') AS genre_name
-		FROM series s
-		JOIN series_genres sg ON s.series_id = sg.series_id
-		JOIN genres g ON sg.genre_id = g.genre_id
-		WHERE s.title LIKE ?
-		GROUP BY s.series_id
-		ORDER BY s.series_rating DESC;
-	`;
-
-	connection.query(sql, [`%${query}%`], (err, results) => {
-		if (err) {
-			console.error(err);
-			return res.status(500).send("Database error");
-		}
-		res.render("pages/search", { results, query });
-	});
-});
 
 app.get("/logout", (req, res) => {
 	req.session.destroy((err) => {

@@ -1,148 +1,182 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title><%= series.title %> | BingeSync</title>
-  <link rel="stylesheet" href="/css/series.css" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-</head>
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title><%= series.title %> | BingeSync</title>
+		<link rel="stylesheet" href="/css/series.css" />
+		<link
+			rel="stylesheet"
+			href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+		/>
+	</head>
 
-<body>
-  <div class="movie-page">
-    
-    <!-- ===== HERO SECTION ===== -->
-    <section class="hero">
-      <div class="overlay"></div>
-      <img src="<%= series.poster_url %>" class="bg-image" alt="<%= series.title %>" />
+	<body>
+		<div class="movie-page">
+			<!-- ===== HERO SECTION ===== -->
+			<section class="hero">
+				<div class="overlay"></div>
+				<img
+					src="<%= series.landscape_poster_url %>"
+					class="bg-image"
+					alt="<%= series.title %>"
+				/>
 
-      <div class="hero-content">
-        <img src="<%= series.poster_url %>" class="poster" alt="poster" />
+				<div class="hero-content">
+					<img src="<%= series.poster_url %>" class="poster" alt="poster" />
 
-        <div class="info">
-          <h1>
-            <%= series.title %> 
-            <span class="tag"><%= series.age_rating || '16+' %></span>
-          </h1>
+					<div class="info">
+						<h1>
+							<%= series.title %>
+							<span class="tag"><%= series.age_rating || '16+' %></span>
+						</h1>
 
-          <p class="meta">
-            <%= series.genre_name %> • 
-            <%= series.series_rating ? parseFloat(series.series_rating).toFixed(1) : "8.0" %>
-          </p>
+						<p class="meta">
+							<%= series.genre_name %> •
+							<span class="stars">
+								<% var rating10 = series.series_rating || 0; // rating out of 10
+								var rating5 = rating10 / 2; // convert to 5-star scale var
+								fullStars = Math.floor(rating5); var halfStar = (rating5 % 1) >=
+								0.5; %> <% for (var i = 0; i < fullStars; i++) { %>
+								<i class="fa-solid fa-star"></i>
+								<% } %> <% if (halfStar) { %>
+								<i class="fa-solid fa-star-half-stroke"></i>
+								<% } %> <% for (var i = fullStars + (halfStar ? 1 : 0); i < 5;
+								i++) { %>
+								<i class="fa-regular fa-star"></i>
+								<% } %>
+							</span>
+							<span class="rating-num"><%= (rating5).toFixed(1) %> / 5</span>
+						</p>
 
-          <p class="desc"><%= series.summary %></p>
+						<p class="desc">
+							<%= series.summary %> Lorem ipsum dolor sit amet consectetur
+							adipisicing elit. Quis velit accusantium sequi modi possimus animi
+							voluptatum, iure, impedit vitae magni dolor nemo officia? Soluta
+							maiores deserunt commodi.
+						</p>
 
-          <!-- ===== DROPDOWNS ===== -->
-          <div class="dropdowns">
-            <div class="dropdown">
-              <button class="dropdown-btn">
-                Seasons <i class="fa fa-chevron-down"></i>
-              </button>
-              <div class="dropdown-content1">
-                <% if (series.seasons) { %>
-                  <% series.seasons.forEach((s) => { %>
-                    <a href="#">Season <%= s.number %></a>
-                  <% }) %>
-                <% } %>
-              </div>
-            </div>
+						<!-- ===== DROPDOWNS ===== -->
+						<div class="dropdowns">
+							<div class="dropdown">
+								<button class="dropdown-btn">
+									Seasons <i class="fa fa-chevron-down"></i>
+								</button>
+								<div class="dropdown-content1">
+									<% if (series.seasons) { %> <% series.seasons.forEach((s) => {
+									%>
+									<a href="#">Season <%= s.number %></a>
+									<% }) %> <% } %>
+								</div>
+							</div>
 
-            <div class="dropdown">
-              <button class="dropdown-btn">
-                Episodes <i class="fa fa-chevron-down"></i>
-              </button>
-              <div class="dropdown-content">
-                <% if (series.episodes) { %>
-                  <% series.episodes.forEach((e) => { %>
-                    <a href="#">Episode <%= e.number %>: <%= e.title %></a>
-                  <% }) %>
-                <% } %>
-              </div>
-            </div>
-          </div>
+							<div class="dropdown">
+								<button class="dropdown-btn">
+									Episodes <i class="fa fa-chevron-down"></i>
+								</button>
+								<div class="dropdown-content">
+									<% if (series.episodes) { %> <% series.episodes.forEach((e) =>
+									{ %>
+									<a href="#">Episode <%= e.number %>: <%= e.title %></a>
+									<% }) %> <% } %>
+								</div>
+							</div>
+						</div>
 
-          <div class="buttons">
-            <button class="play-btn"><i class="fa fa-play"></i> Watch Trailer</button>
-            <button class="watchlist-btn"><i class="fa fa-plus"></i> Add to Watchlist</button>
-          </div>
-        </div>
-      </div>
-    </section>
+						<div class="buttons">
+							<button class="play-btn">
+								<i class="fa fa-play"></i> Watch Trailer
+							</button>
+							<button class="watchlist-btn">
+								<i class="fa fa-plus"></i> Add to Watchlist
+							</button>
+						</div>
+					</div>
+				</div>
+			</section>
 
-    <!-- ===== RECOMMENDED ===== -->
-    <section class="recommended">
-      <h2>Recommended For You</h2>
-      <div class="recommendation-slider">
+			<!-- ===== RECOMMENDED ===== -->
+			<section class="recommended">
+  <div class="container">
+    <div class="section-header">Recommended For You</div>
+
+    <!-- Single horizontal row (no arrow buttons) -->
+    <div class="genre-carousel-wrapper no-buttons">
+      <div class="recommendation-row genre-carousel">
         <% recommended.forEach((rec) => { %>
-          <div class="netflix-card">
-            <a href="<%= rec.id %>">
-              <div class="card-image">
-                <img src="<%= rec.poster_url %>" alt="<%= rec.title %>" />
-                <div class="overlay"></div>
+        <a href="/watchlist/series/<%= rec.series_id || rec.id %>" class="movie-item">
+          <img src="<%= rec.poster_url %>" alt="<%= rec.title %>" />
+          <div class="movie-item-content">
+            <div class="movie-item-title"><%= rec.title %></div>
+            <div class="movie-infos">
+              <div class="movie-info">
+                <i class="fa-solid fa-star"></i>
+                <span><%= rec.series_rating ? parseFloat(rec.series_rating).toFixed(1) : "N/A" %></span>
               </div>
-              <div class="card-info">
-                <h3 class="title"><%= rec.title %></h3>
-                <p class="meta">
-                  <%= rec.genre_name || "Drama" %> • 
-                  <%= rec.series_rating ? parseFloat(rec.series_rating).toFixed(1) : "8.0" %>
-                </p>
-              </div>
-            </a>
+              <div class="movie-info"><span>HD</span></div>
+              <div class="movie-info"><span>16+</span></div>
+            </div>
           </div>
+        </a>
         <% }) %>
       </div>
-    </section>
-  </div>
-
-  <!-- ===== TRAILER MODAL ===== -->
-  <div id="trailerModal" class="modal">
-    <div class="modal-content">
-      <span class="close" onclick="closeTrailer()">&times;</span>
-      <iframe
-        id="trailerFrame"
-        width="800" height="450"
-        src=""
-        frameborder="0"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-        allowfullscreen>
-      </iframe>
     </div>
   </div>
+</section>
 
-  <!-- ===== SCRIPTS ===== -->
-  <script>
-    // ===== TRAILER MODAL =====
-    const rawURL = "<%= series.trailer_url %>";
 
-    function getEmbedURL(url) {
-      if (!url) return "";
-      if (url.includes("watch?v=")) return url.replace("watch?v=", "embed/");
-      if (url.includes("youtu.be/")) return url.replace("youtu.be/", "www.youtube.com/embed/");
-      return url;
-    }
+		<!-- ===== TRAILER MODAL ===== -->
+		<div id="trailerModal" class="modal">
+			<div class="modal-content">
+				<span class="close" onclick="closeTrailer()">&times;</span>
+				<iframe
+					id="trailerFrame"
+					width="800"
+					height="450"
+					src=""
+					frameborder="0"
+					allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+					allowfullscreen
+				>
+				</iframe>
+			</div>
+		</div>
 
-    document.querySelector(".play-btn").addEventListener("click", () => {
-      const embedURL = getEmbedURL(rawURL);
-      openTrailer(embedURL);
-    });
+		<!-- ===== SCRIPTS ===== -->
+		<script>
+			// ===== TRAILER MODAL =====
+			const rawURL = "<%= series.trailer_url %>";
 
-    function openTrailer(url) {
-      const frame = document.getElementById("trailerFrame");
-      frame.src = url + "?autoplay=1";
-      document.getElementById("trailerModal").style.display = "flex";
-    }
+			function getEmbedURL(url) {
+				if (!url) return "";
+				if (url.includes("watch?v=")) return url.replace("watch?v=", "embed/");
+				if (url.includes("youtu.be/"))
+					return url.replace("youtu.be/", "www.youtube.com/embed/");
+				return url;
+			}
 
-    function closeTrailer() {
-      const modal = document.getElementById("trailerModal");
-      const frame = document.getElementById("trailerFrame");
-      frame.src = "";
-      modal.style.display = "none";
-    }
+			document.querySelector(".play-btn").addEventListener("click", () => {
+				const embedURL = getEmbedURL(rawURL);
+				openTrailer(embedURL);
+			});
 
-    window.onclick = function (event) {
-      const modal = document.getElementById("trailerModal");
-      if (event.target === modal) closeTrailer();
-    };
-  </script>
-</body>
+			function openTrailer(url) {
+				const frame = document.getElementById("trailerFrame");
+				frame.src = url + "?autoplay=1";
+				document.getElementById("trailerModal").style.display = "flex";
+			}
+
+			function closeTrailer() {
+				const modal = document.getElementById("trailerModal");
+				const frame = document.getElementById("trailerFrame");
+				frame.src = "";
+				modal.style.display = "none";
+			}
+
+			window.onclick = function (event) {
+				const modal = document.getElementById("trailerModal");
+				if (event.target === modal) closeTrailer();
+			};
+		</script>
+	</body>
 </html>
