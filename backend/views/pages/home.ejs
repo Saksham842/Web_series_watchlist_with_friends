@@ -1,115 +1,487 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>BingeSync | Home</title>
-  <link rel="shortcut icon" href="./Images/Logo/Title.jpeg" type="image/x-icon" />
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>BingeSync | Home</title>
+		<link
+			rel="shortcut icon"
+			href="/Images/Logo/Title.jpeg"
+			type="image/x-icon"
+		/>
+		<link
+			href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
+			rel="stylesheet"
+		/>
 
-  <!-- Font & Icons -->
-  <link href="https://fonts.googleapis.com/css2?family=Ubuntu&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+		<!-- Owl Carousel CSS -->
+		<
+		<link
+			rel="stylesheet"
+			href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css"
+		/>
+		<link
+			rel="stylesheet"
+			href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css"
+		/>
+		<link
+			rel="stylesheet"
+			href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+		/>
 
-  <!-- Combined CSS -->
-  <link rel="stylesheet" href="/css/home.css" />
-  <link rel="stylesheet" href="/css/sidebar.css" />
-</head>
+		<!-- Fonts & Icons -->
+		<link
+			href="https://fonts.googleapis.com/css2?family=Ubuntu&display=swap"
+			rel="stylesheet"
+		/>
+		<link
+			rel="stylesheet"
+			href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+		/>
 
-<body>
+		<!-- Your CSS -->
+		<link rel="stylesheet" href="/css/home.css" />
+		<link rel="stylesheet" href="/css/sidebar.css" />
+	</head>
 
-  <% if (message) { %>
-  <div class="verification-message" id="loginMsg">
-    <%= message %>
-  </div>
-  <% } %>
+	<body>
+		<% if (message) { %>
+		<div class="verification-message" id="loginMsg"><%= message %></div>
+		<% } %>
 
-  <script>
-    const msg = document.getElementById("loginMsg");
-    if (msg) {
-      setTimeout(() => {
-        msg.remove();
-      }, 4000);
-    }
-  </script>
+		<script>
+			const msg = document.getElementById("loginMsg");
+			if (msg) setTimeout(() => msg.remove(), 4000);
+		</script>
 
-  <!-- Navbar -->
-  <nav>
-    <div class="nav-left">
-      <img src="/css/binge.jpg" alt="logo" class="logo" onclick="window.location.href='/'">
-    </div>
+		<!-- Navbar -->
+		<div class="nav">
+			<nav>
+				<div class="nav-left">
+					<a href="#" class="logo">
+						<i class="bx bx-movie-play bx-tada main-color"></i>
+						BING<span class="logo-e">E</span>SYNC
+					</a>
+				</div>
 
-    <i class="fa-solid fa-bars menu-toggle" id="menuToggle"></i>
+				<i class="fa-solid fa-bars menu-toggle" id="menuToggle"></i>
 
-    <div class="nav-links" id="navLinks">
-      <a href="#">Home</a>
-      <a href="/watchlist">Watchlist</a>
-      <a href="/watchlist/friends/list">Friends</a>
-      <a href="#">Contact Us</a>
+				<div class="nav-links" id="navLinks">
+					<a href="#" class="active">Home</a>
+					<a href="#">Watchlist</a>
+					<a href="#">Friends</a>
+					<a href="#">Requests</a>
 
-      <select id="genreSelect" onchange="goToGenrePage(this)">
-        <option value="" disabled selected>Genres</option>
-        <option value="#">Popular</option>
-        <option value="#">Crime</option>
-        <option value="#">Thriller</option>
-        <option value="#">Action</option>
-        <option value="#">Comedy</option>
-        <option value="#">Romance</option>
-      </select>
-    </div>
+					<select id="genreSelect" onchange="goToGenrePage(this)">
+						<option value="" disabled selected>Genres</option>
+						<% allGenres.forEach(g => { %>
+						<option value="/watchlist/genre/<%= g.genre_id %>">
+							<%= g.genre_name %>
+						</option>
+						<% }) %>
+					</select>
+				</div>
 
-    <div class="search-container">
-      <input type="text" id="searchText" placeholder="Search" />
-      <button>Search</button>
-      <i class="fa-solid fa-circle-user user-icon"></i>
-    </div>
-  </nav>
+				<div class="search-container">
+					<form action="/watchlist/search" method="GET" id="searchForm">
+						<input
+							type="text"
+							name="q"
+							id="searchText"
+							placeholder="Search series..."
+							autocomplete="off"
+							required
+						/>
+						<button type="submit">SEARCH</button>
+					</form>
+					<div id="liveResults" class="search-results-box"></div>
+					<i class="fa-solid fa-circle-user user-icon"></i>
+				</div>
+			</nav>
+		</div>
 
-  <!-- Sidebar Overlay -->
-  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+		<!-- Sidebar -->
+		<div class="sidebar-overlay" id="sidebarOverlay"></div>
+		<%- include('../include/sidebar', { user: user }) %>
 
-  <!-- Sidebar (included partial) -->
-  <%- include('../include/sidebar', { user: user }) %>
+		<!-- HERO SECTION -->
+		<!-- HERO SECTION -->
+		<div class="hero-section">
+			<div class="hero-slide">
+				<div class="owl-carousel carousel-nav-center" id="hero-carousel">
+					<% if (heroSeries && heroSeries.length > 0) { %> <%
+					heroSeries.forEach(series => { %>
+					<div class="hero-slide-item">
+						<a href="/watchlist/series/<%= series.series_id %>">
+							<img
+								src="<%= series.landscape_poster_url %>"
+								alt="<%= series.title %>"
+							/>
+						</a>
 
-  <!-- Page Content -->
-  <div class="content">
-    <% for (let result of results) { %>
-      <div class="netflix-card" onclick="window.location.href='/watchlist/series/<%= result.series_id %>'">
-  <img src="<%= result.poster_url %>" alt="<%= result.title %>">
-  <div class="card-info">
-    <h3 class="title"><%= result.title %></h3>
-    <p class="meta">⭐ <%= result.series_rating || '9.2' %> | <%= result.genre_name || 'Drama' %></p>
-  </div>
-</div>
+						<div class="overlay"></div>
+						<div class="hero-slide-item-content">
+							<div class="item-content-wraper">
+								<div class="item-content-title top-down">
+									<%= series.title %>
+								</div>
+								<div class="movie-infos top-down delay-2">
+									<div class="movie-info">
+										<i class="fa-solid fa-star"></i>
+										<span><%= series.series_rating || 'N/A' %></span>
+									</div>
+									<div class="movie-info"><span>HD</span></div>
+									<div class="movie-info"><span>16+</span></div>
+								</div>
+								<div class="item-content-description top-down delay-4">
+									<%= series.description ? series.description.substring(0, 150)
+									+ '...' : 'No description available.' %> Lorem ipsum dolor sit
+									amet consectetur adipisicing elit. Deserunt eius minus velit
+									perspiciatis. Dolorum labore ea, est alias harum hic at quo a
+									amet fuga eum autem iure exercitationem veritatis blanditiis
+									eos et quibusdam suscipit deleniti numquam distinctio ratione!
+									Sint repudiandae
+								</div>
+								<div class="item-action top-down delay-6">
+									<a
+										href="/watchlist/series/<%= series.series_id %>"
+										class="btn btn-hover"
+									>
+										<i class="fa-solid fa-play"></i>
+										<span>Add To Watchlist</span>
+									</a>
+								</div>
+							</div>
+						</div>
+					</div>
+					<% }) %> <% } else { %>
+					<p style="text-align: center; padding: 2rem">
+						No featured series found.
+					</p>
+					<% } %>
+				</div>
+			</div>
+		</div>
 
-    <% } %>
-  </div>
+		<!-- TRENDING MOVIES SLIDE -->
+		<div class="top-movies-slide">
+			<div class="section-header">Trending Movies</div>
+			<div class="owl-carousel" id="top-movies-carousel">
+				<% if (trendingMovies && trendingMovies.length > 0) { %> <%
+				trendingMovies.forEach(movie => { %>
+				<a href="/watchlist/series/<%= movie.series_id %>" class="movie-item">
+					<img src="<%= movie.poster_url %>" alt="<%= movie.title %>" />
 
-  <script>
-    // Navbar toggle for small screens
-    const menuToggle = document.getElementById("menuToggle");
-    const navLinks = document.getElementById("navLinks");
-    menuToggle.addEventListener("click", () => {
-      navLinks.classList.toggle("active");
-    });
+					<div class="movie-item-content">
+						<div class="movie-item-title"><%= movie.title %></div>
+						<div class="movie-infos">
+							<div class="movie-info">
+								<i class="fa-solid fa-star"></i>
+								<span><%= movie.series_rating || 'N/A' %></span>
+							</div>
+							<div class="movie-info"><span>HD</span></div>
+							<div class="movie-info"><span>16+</span></div>
+						</div>
+					</div>
+				</a>
+				<% }) %> <% } else { %>
+				<p style="text-align: center; padding: 2rem">
+					No trending movies found.
+				</p>
+				<% } %>
+			</div>
+		</div>
 
-    // Genre dropdown navigation
-    function goToGenrePage(select) {
-      const value = select.value;
-      if (value) window.location.href = value;
-    }
+		<!-- Genre-based Series Carousels -->
+		<% genreSeriesRows.forEach(row => { %>
+		<div class="section">
+			<div class="container">
+				<div class="section-header"><%= row.genre %></div>
+				<div class="genre-carousel-wrapper">
+					<button class="scroll-btn left">&#10094;</button>
+					<div class="genre-carousel">
+						<% row.series.forEach(series => { %>
+						<a
+							href="/watchlist/series/<%= series.series_id %>"
+							class="movie-item"
+						>
+							<img src="<%= series.poster_url %>" alt="<%= series.title %>" />
+							<div class="movie-item-content">
+								<div class="movie-item-title"><%= series.title %></div>
+								<div class="movie-infos">
+									<div class="movie-info">
+										<i class="fa-solid fa-star"></i>
+										<span><%= series.series_rating %></span>
+									</div>
+									<div class="movie-info"><span>HD</span></div>
+									<div class="movie-info"><span>16+</span></div>
+								</div>
+							</div>
+						</a>
+						<% }) %>
+					</div>
+					<button class="scroll-btn right">&#10095;</button>
+				</div>
+			</div>
+		</div>
+		<% }) %>
+		<!-- FOOTER -->
+		<footer class="footer">
+			<hr class="footer-hr" />
+			<div class="footer-content">
+				<!-- Left -->
+				<div class="nav-left">
+					<a href="#" class="logo">
+						<i class="bx bx-movie-play bx-tada main-color"></i>
+						BING<span class="logo-e">E</span>SYNC
+					</a>
+				</div>
 
-    // Search functionality
-    const searchInput = document.getElementById("searchText");
-    const movieCards = document.querySelectorAll(".netflix-card");
+				<!-- Follow Us -->
+				<div class="footer-middle">
+					<h2 class="footer-heading">Follow Us</h2>
+					<div class="footer-icons">
+						<a href="https://facebook.com" target="_blank"
+							><i class="fab fa-facebook-f"></i
+						></a>
+						<a href="https://twitter.com" target="_blank"
+							><i class="fab fa-twitter"></i
+						></a>
+						<a href="https://linkedin.com" target="_blank"
+							><i class="fab fa-linkedin"></i
+						></a>
+						<a href="https://instagram.com" target="_blank"
+							><i class="fab fa-instagram"></i
+						></a>
+						<a href="https://github.com" target="_blank"
+							><i class="fab fa-github"></i
+						></a>
+					</div>
+				</div>
 
-    searchInput.addEventListener("input", () => {
-      const query = searchInput.value.toLowerCase();
-      movieCards.forEach(card => {
-        const title = card.querySelector(".title").textContent.toLowerCase();
-        card.style.display = title.includes(query) ? "block" : "none";
-      });
-    });
-  </script>
+				<!-- Services -->
+				<div class="footer-middle">
+					<h2 class="footer-heading">Services</h2>
+					<ul class="footer-list">
+						<li><a href="/watchlist/home">Enjoy Latest Movies</a></li>
+						<li><a href="/watchlist/web-series">Watch Web-Series</a></li>
+						<li><a href="/watchlist/kids">Everything for Kids</a></li>
+						<li><a href="/watchlist/news">Coming Soon</a></li>
+						<li><a href="/watchlist/premium">Get Premium Subscription</a></li>
+						<li><a href="/watchlist/faq">FAQ</a></li>
+					</ul>
+				</div>
 
-</body>
+				<!-- Try Our App -->
+				<div class="footer-middle">
+					<h2 class="footer-heading">Try Our App</h2>
+					<div class="footer-icons">
+						<a href="#"><i class="fab fa-google-play"></i></a>
+						<a href="#"><i class="fab fa-app-store-ios"></i></a>
+					</div>
+				</div>
+
+				<!-- Contact -->
+				<div class="footer-right">
+					<h2 class="footer-heading">Contact Us</h2>
+					<p class="footer-bottom-tagline">Feel free to contact us.</p>
+					<a href="/watchlist/contact" class="footer-contact-button">Contact</a>
+				</div>
+			</div>
+
+			<hr class="footer-hr" />
+
+			<!-- Scroll to Top Button -->
+			<button id="scrollToTopButton" title="Go to top">
+				<i class="fa fa-angle-double-up"></i>
+			</button>
+		</footer>
+
+		<!-- JS (moved to bottom for proper loading) -->
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+
+		<script>
+			const searchInput = document.getElementById("searchText");
+			const liveResults = document.getElementById("liveResults");
+			let debounceTimer;
+
+			searchInput.addEventListener("input", () => {
+				clearTimeout(debounceTimer);
+				const query = searchInput.value.trim();
+				if (query === "") {
+					liveResults.style.display = "none";
+					return;
+				}
+
+				debounceTimer = setTimeout(async () => {
+					try {
+						const res = await fetch(
+							`/api/search?q=${encodeURIComponent(query)}`
+						);
+						const data = await res.json();
+
+						if (data.length === 0) {
+							liveResults.style.display = "none";
+							return;
+						}
+
+						liveResults.innerHTML = data
+							.map(
+								(s) => `
+					<a href="/watchlist/series/${s.series_id}" class="result-item">
+						<img src="${s.poster_url}" alt="${s.title}">
+						<div>
+							<strong>${s.title}</strong>
+							<small>⭐ ${s.series_rating}  ${s.all_genres || ""}</small>
+						</div>
+					</a>
+				`
+							)
+							.join("");
+
+						liveResults.style.display = "block";
+					} catch (err) {
+						console.error(err);
+					}
+				}, 300);
+			});
+
+			// Hide dropdown when clicking outside
+			document.addEventListener("click", (e) => {
+				if (!document.querySelector(".search-container").contains(e.target)) {
+					liveResults.style.display = "none";
+				}
+			});
+
+			$(document).ready(function () {
+				var owl = $("#hero-carousel");
+
+				owl.owlCarousel({
+					items: 1,
+					loop: true,
+					nav: true,
+					dots: false,
+					navText: [
+						"<i class='fas fa-chevron-left'></i>",
+						"<i class='fas fa-chevron-right'></i>",
+					],
+					autoplay: true,
+					autoplayTimeout: 5000,
+					autoplayHoverPause: true,
+				});
+
+				// Animate the content of the **currently active slide on page load**
+				$(".owl-item.active .hero-slide-item-content").addClass("active");
+
+				// Animate content on slide change
+				owl.on("changed.owl.carousel", function (event) {
+					// Remove active from all slide contents
+					$(".hero-slide-item-content").removeClass("active");
+
+					// Add active to content in the currently active slide
+					$(".owl-item")
+						.eq(event.item.index)
+						.find(".hero-slide-item-content")
+						.addClass("active");
+				});
+				// Scroll to Top Button
+				const scrollBtn = document.getElementById("scrollToTopButton");
+
+				window.addEventListener("scroll", () => {
+					if (
+						document.body.scrollTop > 100 ||
+						document.documentElement.scrollTop > 100
+					) {
+						scrollBtn.style.display = "block";
+					} else {
+						scrollBtn.style.display = "none";
+					}
+				});
+
+				scrollBtn.addEventListener("click", () => {
+					window.scrollTo({ top: 0, behavior: "smooth" });
+				});
+				// Navbar toggle
+				$("#menuToggle").on("click", () =>
+					$("#navLinks").toggleClass("active")
+				);
+
+				// Genre select
+				window.goToGenrePage = (select) => {
+					const value = select.value;
+					if (value) window.location.href = value;
+				};
+
+				const leftBtns = document.querySelectorAll(".scroll-btn.left");
+				const rightBtns = document.querySelectorAll(".scroll-btn.right");
+
+				leftBtns.forEach((btn) => {
+					const carousel = btn
+						.closest(".genre-carousel-wrapper")
+						.querySelector(".genre-carousel");
+					btn.addEventListener("click", () => {
+						const cardWidth =
+							carousel.querySelector(".movie-item").offsetWidth + 18; // card width + gap
+						carousel.scrollBy({ left: -cardWidth, behavior: "smooth" });
+					});
+				});
+
+				rightBtns.forEach((btn) => {
+					const carousel = btn
+						.closest(".genre-carousel-wrapper")
+						.querySelector(".genre-carousel");
+					btn.addEventListener("click", () => {
+						const cardWidth =
+							carousel.querySelector(".movie-item").offsetWidth + 18; // card width + gap
+						carousel.scrollBy({ left: cardWidth, behavior: "smooth" });
+					});
+				});
+
+				// Search filter
+				$("#searchText").on("input", function () {
+					const query = $(this).val().toLowerCase();
+					$(".netflix-card").each(function () {
+						const title = $(this).find(".title").text().toLowerCase();
+						$(this).toggle(title.includes(query));
+					});
+				});
+				$("#top-movies-carousel").owlCarousel({
+					loop: true,
+					margin: 0, // no space between cards
+					nav: true,
+					dots: false,
+					autoWidth: true, // allows items to take image width
+					items: 5,
+					slideBy: 1, // shows 8 items if space allows
+					responsive: {
+						0: { items: 2 },
+						480: { items: 3 },
+						768: { items: 5 },
+						1024: { items: 8 },
+					},
+					navText: [
+						"<i class='bx bx-chevron-left'></i>",
+						"<i class='bx bx-chevron-right'></i>",
+					],
+					autoplay: true,
+					autoplayTimeout: 2000,
+					autoplayHoverPause: true,
+					smartSpeed: 800,
+				});
+				$(".movie-item").hover(
+					function () {
+						$(this).find("img").css("filter", "brightness(0.7)"); // dim on hover
+					},
+					function () {
+						$(this).find("img").css("filter", "brightness(1)"); // reset on leave
+					}
+				);
+			});
+			function goToGenrePage(select) {
+				const value = select.value;
+				if (value) window.location.href = value;
+			}
+		</script>
+	</body>
 </html>
