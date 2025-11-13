@@ -37,7 +37,7 @@ const connection = mysql.createConnection({
 	host: "localhost",
 	user: "root",
 	database: "watchlist",
-	password: "Tejaswi49!",
+	password: "Abcd@1234",
 	multipleStatements: true,
 });
 
@@ -482,10 +482,7 @@ app.get("/watchlist/profile", async (req, res) => {
 		// Fetch user details
 		const [userRows] = await connection
 			.promise()
-			.query(
-				"SELECT id, name, email  FROM user WHERE id = ?",
-				[user.id]
-			);
+			.query("SELECT id, name, email  FROM user WHERE id = ?", [user.id]);
 		const userData = userRows[0] || user;
 
 		// Fetch friends (both sender and receiver where status = 'accepted')
@@ -505,10 +502,9 @@ app.get("/watchlist/profile", async (req, res) => {
 		// Fetch watchlist count
 		const [countRows] = await connection
 			.promise()
-			.query(
-				"SELECT COUNT(*) AS count FROM watchlist WHERE user_id = ?",
-				[user.id]
-			);
+			.query("SELECT COUNT(*) AS count FROM watchlist WHERE user_id = ?", [
+				user.id,
+			]);
 		const watchlistCount = countRows[0]?.count || 0;
 
 		// Render profile page
@@ -522,9 +518,6 @@ app.get("/watchlist/profile", async (req, res) => {
 		res.status(500).send("Server Error");
 	}
 });
-
-
-
 
 // LIVE search results API (for dropdown)
 app.get("/api/search", (req, res) => {
