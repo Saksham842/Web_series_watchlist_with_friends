@@ -74,47 +74,6 @@
 			</div>
 		</div>
 
-		<style>
-			/* Toast confirm popup */
-			.toast-confirm {
-				visibility: hidden;
-				position: fixed;
-				bottom: 30px;
-				left: 50%;
-				transform: translateX(-50%);
-				background: #333;
-				color: #fff;
-				padding: 16px 24px;
-				border-radius: 10px;
-				box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-				z-index: 1000;
-				display: flex;
-				align-items: center;
-				gap: 12px;
-				opacity: 0;
-				transition: opacity 0.3s, bottom 0.3s;
-			}
-
-			.toast-confirm.show {
-				visibility: visible;
-				opacity: 1;
-				bottom: 50px;
-			}
-
-			.toast-actions .btn {
-				background: #fff;
-				color: #333;
-				border: none;
-				padding: 6px 12px;
-				border-radius: 5px;
-				cursor: pointer;
-			}
-
-			.toast-actions .btn:hover {
-				background: #eee;
-			}
-		</style>
-
 		<script>
 			async function removeFriend(friendId) {
 				const confirmed = await showConfirm(
@@ -126,21 +85,31 @@
 					const res = await fetch(`/watchlist/friends/remove/${friendId}`, {
 						method: "DELETE",
 					});
+
 					if (res.ok) {
-						document
-							.querySelector([onclick="removeFriend('${friendId}')"])
-							.closest(".friend-card")
-							.remove();
-						showToast("👋 Friend removed");
+						// Find the friend card for this friendId
+						const card = document
+							.querySelector(`button[onclick="removeFriend('${friendId}')"]`)
+							?.closest(".friend-card");
+
+						if (card) {
+							card.style.transition = "all 0.4s ease";
+							card.style.opacity = "0";
+							card.style.transform = "translateY(20px)";
+
+							setTimeout(() => card.remove(), 400);
+						}
+
+						showToast("👋 Friend removed", "success");
 					} else {
-						showToast("❌ Error removing friend");
+						showToast("❌ Error removing friend", "error");
 					}
 				} catch {
-					showToast("❌ Error removing friend");
+					showToast("❌ Error removing friend", "error");
 				}
 			}
 
-			// Toast-style confirmation function
+			// Toast confirmation
 			function showConfirm(message) {
 				return new Promise((resolve) => {
 					const toast = document.getElementById("toast-confirm");
@@ -151,23 +120,36 @@
 					msg.textContent = message;
 					toast.classList.add("show");
 
+					const cleanup = () => toast.classList.remove("show");
+
 					yesBtn.onclick = () => {
-						toast.classList.remove("show");
+						cleanup();
 						resolve(true);
 					};
 					noBtn.onclick = () => {
-						toast.classList.remove("show");
+						cleanup();
 						resolve(false);
 					};
 				});
 			}
 
-			// Regular toast for feedback
-			function showToast(msg) {
-				const toast = document.getElementById("toast");
-				toast.textContent = msg;
+			// Create reusable toast for messages
+			function showToast(msg, type = "success") {
+				let toast = document.getElementById("toast");
+				if (!toast) {
+					toast = document.createElement("div");
+					toast.id = "toast";
+					toast.className = "toast";
+					document.body.appendChild(toast);
+				}
+
+				toast.innerHTML =
+					type === "success"
+						? `<i class="fa-solid fa-circle-check"></i> ${msg}`
+						: `<i class="fa-solid fa-circle-xmark"></i> ${msg}`;
+
 				toast.classList.add("show");
-				setTimeout(() => toast.classList.remove("show"), 2500);
+				setTimeout(() => toast.classList.remove("show"), 3000);
 			}
 		</script>
 	</body>
