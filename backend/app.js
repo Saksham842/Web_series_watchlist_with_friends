@@ -39,11 +39,6 @@ const connection = mysql.createConnection({
   database: 'watchlist',
   password: 'Abcd@1234',
   multipleStatements: true
-	host: "localhost",
-	user: "root",
-	database: "watchlist",
-	password: "Tejaswi49!",
-	multipleStatements: true,
 });
 
 connection.connect((err) => {
