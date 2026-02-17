@@ -1,79 +1,104 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Find Friends | BingeSync</title>
-  <link rel="stylesheet" href="/css/friends.css" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-</head>
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Find Friends | BingeSync</title>
+		<link rel="stylesheet" href="/css/friends.css" />
+		<link
+			rel="stylesheet"
+			href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+		/>
+	</head>
 
-<body>
-  <div class="find-page">
-    <section class="hero">
-      <div class="overlay"></div>
-      <img src="https://images.unsplash.com/photo-1593642532973-d31b6557fa68?auto=format&fit=crop&w=1400&q=80" class="bg-image" alt="Find Friends" />
-      <div class="hero-content">
-        <h1>🎥 Find New Friends</h1>
-        <p>Connect with others and share your binge lists!</p>
-      </div>
-    </section>
+	<body>
+		<div class="find-page">
+			<section class="hero">
+				<div class="overlay"></div>
+				<img
+					src="https://images.unsplash.com/photo-1593642532973-d31b6557fa68?auto=format&fit=crop&w=1400&q=80"
+					class="bg-image"
+					alt="Find Friends"
+				/>
+				<div class="hero-content">
+					<h1>🎥 Find New Friends</h1>
+					<p>Connect with others and share your binge lists!</p>
+				</div>
+			</section>
 
-    <section class="friends-list">
-      <h2>All Users</h2>
+			<section class="friends-list">
+				<h2>All Users</h2>
 
-      <% if (users.length === 0) { %>
-        <p class="empty">No users found 😅</p>
-      <% } else { %>
-        <div class="friends-grid">
-          <% users.forEach(user => { %>
-            <div class="friend-card">
-              <div class="avatar">
-                <img src="https://api.dicebear.com/9.x/avataaars/svg?seed=<%= user.name %>" alt="<%= user.name %>">
-              </div>
-              <div class="friend-info">
-                <h3><%= user.name %></h3>
-                <p><%= user.email %></p>
-              </div>
-              <div class="actions">
-                <button class="btn add-btn" onclick="sendRequest('<%= user.id %>', this)">
-                  <i class="fa-solid fa-user-plus"></i> Add Friend
-                </button>
-              </div>
-            </div>
-          <% }) %>
-        </div>
-      <% } %>
-    </section>
-  </div>
+				<% if (users.length === 0) { %>
+				<p class="empty">No users found 😅</p>
+				<% } else { %>
+				<div class="friends-grid">
+					<% users.forEach(user => { %>
+					<div class="friend-card">
+						<div class="avatar">
+							<img
+								src="https://api.dicebear.com/9.x/avataaars/svg?seed=<%= user.name %>"
+								alt="<%= user.name %>"
+							/>
+						</div>
+						<div class="friend-info">
+							<h3><%= user.name %></h3>
+							<p><%= user.email %></p>
+						</div>
+						<div class="actions">
+							<button
+								class="btn add-btn"
+								onclick="sendRequest('<%= user.id %>', this)"
+							>
+								<i class="fa-solid fa-user-plus"></i> Add Friend
+							</button>
+						</div>
+					</div>
+					<% }) %>
+				</div>
+				<% } %>
+			</section>
+		</div>
 
-  <div id="toast" class="toast">Request Sent</div>
+		<div id="toast" class="toast">Request Sent</div>
 
-  <script>
-    async function sendRequest(receiverId, btn) {
-      btn.disabled = true;
-      btn.innerHTML = '<i class="fa-solid fa-hourglass-half"></i> Sending...';
+		<script>
+			async function sendRequest(receiverId, btn) {
+				try {
+					btn.disabled = true;
+					btn.innerHTML =
+						'<i class="fa-solid fa-hourglass-half"></i> Sending...';
 
-      const res = await fetch(`/friends/request/${receiverId}`, { method: 'POST' });
-      const data = await res.json();
+					const res = await fetch("/watchlist/friends/request", {
+						method: "POST",
+						headers: { "Content-Type": "application/json" },
+						body: JSON.stringify({ receiver_id: receiverId }),
+					});
 
-      if (data.success) {
-        btn.innerHTML = '<i class="fa-solid fa-check"></i> Request Sent';
-        btn.classList.add('sent');
-        showToast('✅ Friend request sent!');
-      } else {
-        btn.disabled = false;
-        btn.innerHTML = '<i class="fa-solid fa-user-plus"></i> Add Friend';
-        showToast('❌ Error sending request');
-      }
-    }
+					if (!res.ok) {
+						const text = await res.text();
+						throw new Error(`Server error: ${res.status} - ${text}`);
+					}
 
-    function showToast(msg) {
-      const toast = document.getElementById('toast');
-      toast.textContent = msg;
-      toast.classList.add('show');
-      setTimeout(() => toast.classList.remove('show'), 2500);
-    }
-  </script>
-</body>
+					const data = await res.json();
+
+					btn.innerHTML = '<i class="fa-solid fa-check"></i> Request Sent';
+					btn.classList.add("sent");
+					showToast(data.message || "✅ Friend request sent!");
+				} catch (err) {
+					console.error("❌ Error sending request:", err);
+					btn.disabled = false;
+					btn.innerHTML = '<i class="fa-solid fa-user-plus"></i> Add Friend';
+					showToast("❌ Could not send friend request.");
+				}
+			}
+
+			function showToast(msg) {
+				const toast = document.getElementById("toast");
+				toast.textContent = msg;
+				toast.classList.add("show");
+				setTimeout(() => toast.classList.remove("show"), 2500);
+			}
+		</script>
+	</body>
 </html>

@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title><%= user.name %> | Profile</title>
+		<link rel="stylesheet" href="/css/profile.css" />
+		<link
+			rel="stylesheet"
+			href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+		/>
+	</head>
+
+	<body>
+		<!-- Include Navbar -->
+		
+
+		<section class="profile-header container">
+			 <div class="profile-cover"></div> 
+			<div class="profile-info">
+				<img src="https://api.dicebear.com/9.x/avataaars/svg?seed=<%=user.name%>" alt="User" class="profile-pic" />
+				<div class="profile-details">
+					<h2 class="user-name"><%= user.name %></h2>
+					<p class="user-bio" id="userBio">Movie lover • Tech enthusiast • Dreamer</p>
+
+					
+				</div>
+				<button id="editBioBtn" class="btn-editbio"><i class="fa fa-edit"></i> Edit Bio</button>
+			</div>
+		</section>
+
+		<section class="profile-tabs container">
+			<div class="tab-buttons">
+				
+				
+				<button class="tab-btn" data-tab="details">Profile Details</button>
+			</div>
+
+			<div class="tab-content active" id="about">
+				
+			</div>
+
+			<div class="tab-content" id="friends">
+				<h3>Friends</h3>
+				<div class="friend-list">
+					<div class="friend-card">
+						<img src="https://i.pravatar.cc/100?img=5" />
+						<h4>Rahul Mehta</h4>
+					</div>
+					<div class="friend-card">
+						<img src="https://i.pravatar.cc/100?img=8" />
+						<h4>Mia Johnson</h4>
+					</div>
+				</div>
+			</div>
+
+			<div class="tab-content" id="movies">
+				<h3>Watched Movies</h3>
+				<div class="movie-grid">
+					<div class="movie-card">
+						<img
+							src="https://image.tmdb.org/t/p/w300/qmDpIHrmpJINaRKAfWQfftjCdyi.jpg"
+							alt="Inception"
+						/>
+					</div>
+					<div class="movie-card">
+						<img
+							src="https://image.tmdb.org/t/p/w300/kqjL17yufvn9OVLyXYpvtyrFfak.jpg"
+							alt="Interstellar"
+						/>
+					</div>
+				</div>
+			</div>
+
+			<div class="tab-content" id="details">
+				<h3>Profile Details</h3>
+				<div class="details-grid">
+					<div class="detail-item"><span>Name:</span> <%= user.name %></div>
+					<div class="detail-item"><span>Email:</span> <%= user.email %></div>
+					
+				</div>
+			</div>
+		</section>
+		<!-- ================= EDIT PROFILE MODAL ================= -->
+<div id="editModal" class="edit-modal">
+  <div class="edit-box">
+    <h3>Edit Profile</h3>
+    <form id="editForm" action="/profile/update" method="POST">
+      <label>Name:</label>
+      <input type="text" name="name" value="<%= user.name %>" required />
+
+      <label>Email:</label>
+      <input type="email" name="email" value="<%= user.email %>" required />
+
+      <label>Bio:</label>
+      <textarea name="bio"><%= user.bio || '' %></textarea>
+
+      <div class="edit-actions">
+        <button type="button" class="cancel-btn" id="cancelEdit">Cancel</button>
+        <button type="submit" class="save-btn">Save</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+
+		<script>
+			
+  
+  
+  // ====== TAB FUNCTIONALITY ======
+  const tabButtons = document.querySelectorAll(".tab-btn");
+  const tabContents = document.querySelectorAll(".tab-content");
+
+  tabButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      tabButtons.forEach((btn) => btn.classList.remove("active"));
+      button.classList.add("active");
+      const target = button.dataset.tab;
+      tabContents.forEach((content) => {
+        content.classList.remove("active");
+        if (content.id === target) content.classList.add("active");
+      });
+    });
+  });
+
+  // ====== BIO EDITING ======
+  const bioElement = document.getElementById("userBio");
+  const editBtn = document.getElementById("editBioBtn");
+  let isEditing = false;
+
+  // Load saved bio from localStorage (if available)
+  const savedBio = localStorage.getItem("userBio");
+  if (savedBio) {
+    bioElement.textContent = savedBio;
+  }
+
+  editBtn.addEventListener("click", () => {
+    if (!isEditing) {
+      // Turn bio into editable text area
+      const currentBio = bioElement.textContent.trim();
+      bioElement.innerHTML = `<textarea id="bioInput" rows="3" style="width:100%;font-size:1rem;">${currentBio}</textarea>`;
+      editBtn.innerHTML = '<i class="fa fa-save"></i> Save';
+      editBtn.classList.add("save-mode");
+      isEditing = true;
+    } else {
+      // Save edited bio text
+      const newBio = document.getElementById("bioInput").value.trim();
+      const finalBio = newBio || "No bio added yet.";
+      bioElement.textContent = finalBio;
+
+      // Save to localStorage
+      localStorage.setItem("userBio", finalBio);
+
+      editBtn.innerHTML = '<i class="fa fa-edit"></i> Edit Bio';
+      editBtn.classList.remove("save-mode");
+      isEditing = false;
+    }
+  });
+
+
+
+
+
+  
+		</script>
+	</body>
+</html>

@@ -1,189 +1,431 @@
 body {
-  margin: 0;
-  background-color: #0c0c0c;
-  font-family: 'Poppins', sans-serif;
-  color: white;
-  overflow-x: hidden;
+	margin: 0;
+	background: radial-gradient(circle at top, #0a0a0a 0%, #000 100%);
+	font-family: "Poppins", sans-serif;
+	color: #fff;
+	overflow-x: hidden;
 }
 
-/* HERO SECTION */
+/* ===== HERO ===== */
 .hero {
-  position: relative;
-  height: 55vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
+	position: relative;
+	height: 55vh;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	text-align: center;
+	overflow: hidden;
 }
 .hero .bg-image {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  filter: brightness(0.4);
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	filter: brightness(0.35) saturate(1.2);
+	transform: scale(1.1);
+	animation: slowZoom 18s ease-in-out infinite alternate;
 }
 .hero .overlay {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(to top, rgba(0,0,0,0.7), rgba(0,0,0,0.1));
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	background: linear-gradient(to top, rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.3));
 }
 .hero-content {
-  position: relative;
-  z-index: 2;
+	position: relative;
+	z-index: 2;
 }
 .hero-content h1 {
-  font-size: 3rem;
-  color: #ff0048;
-  animation: fadeInDown 0.8s ease forwards;
+	font-size: 3rem;
+	font-weight: 700;
+	background: linear-gradient(90deg, #ff0048, #ff3369, #ff0048);
+	background-clip: text;
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+	letter-spacing: 1px;
+	animation: fadeInDown 0.8s ease forwards;
 }
 .hero-content p {
-  color: #ccc;
-  font-size: 1.1rem;
-  margin-top: 10px;
-  animation: fadeInUp 1s ease forwards;
+	color: #ccc;
+	font-size: 1.1rem;
+	margin-top: 10px;
+	animation: fadeInUp 1s ease forwards;
 }
 
-/* FRIENDS LIST SECTION */
+/* ===== FRIENDS LIST ===== */
 .friends-list {
-  padding: 60px 10%;
+	padding: 60px 10%;
 }
 .friends-list h2 {
-  font-size: 2rem;
-  color: #ff0048;
-  margin-bottom: 25px;
-  text-shadow: 0 0 10px rgba(255, 0, 72, 0.5);
+	font-size: 2.1rem;
+	color: #ff0048;
+	margin-bottom: 25px;
+	text-shadow: 0 0 20px rgba(255, 0, 72, 0.6);
+	letter-spacing: 0.5px;
 }
-
 .empty {
-  text-align: center;
-  color: #aaa;
-  margin-top: 50px;
-  font-size: 1.2rem;
+	text-align: center;
+	color: #999;
+	margin-top: 60px;
+	font-size: 1.2rem;
+	opacity: 0.8;
 }
 
-/* GRID OF FRIENDS */
+/* ===== GRID ===== */
 .friends-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 30px;
-  justify-items: center;
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+	gap: 35px;
+	justify-items: center;
 }
 
-/* INDIVIDUAL FRIEND CARD */
+/* ===== CARD ===== */
 .friend-card {
-  position: relative;
-  background: linear-gradient(145deg, #1a1a1a, #101010);
-  border-radius: 20px;
-  padding: 25px;
-  width: 100%;
-  max-width: 320px;
-  text-align: center;
-  box-shadow: 0 0 15px rgba(255, 0, 72, 0.1);
-  border: 1px solid rgba(255,255,255,0.05);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  animation: slideUp 0.6s ease forwards;
+	position: relative;
+	background: rgba(25, 25, 25, 0.85);
+	border-radius: 20px;
+	padding: 25px;
+	width: 100%;
+	max-width: 320px;
+	text-align: center;
+	backdrop-filter: blur(12px);
+	border: 1px solid rgba(255, 255, 255, 0.06);
+	box-shadow: 0 0 25px rgba(255, 0, 72, 0.1);
+	transition: transform 0.35s ease, box-shadow 0.35s ease;
+	animation: slideUp 0.6s ease forwards;
 }
 .friend-card:hover {
-  transform: translateY(-10px) scale(1.03);
-  box-shadow: 0 0 25px rgba(255, 0, 72, 0.4);
+	transform: translateY(-8px) scale(1.03);
+	box-shadow: 0 0 35px rgba(255, 0, 72, 0.35);
+}
+.friend-card::before {
+	content: "";
+	position: absolute;
+	inset: 0;
+	border-radius: 20px;
+	padding: 1px;
+	background: linear-gradient(
+		135deg,
+		rgba(255, 0, 72, 0.6),
+		rgba(255, 50, 130, 0.2)
+	);
+	-webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+	-webkit-mask-composite: xor;
+	mask-composite: exclude;
+	pointer-events: none;
 }
 
+/* ===== AVATAR ===== */
 .avatar img {
-  width: 90px;
-  height: 90px;
-  border-radius: 50%;
-  border: 3px solid #ff0048;
-  box-shadow: 0 0 15px rgba(255, 0, 72, 0.5);
-  margin-bottom: 15px;
-  transition: transform 0.3s ease;
+	width: 90px;
+	height: 90px;
+	border-radius: 50%;
+	border: 3px solid #ff0048;
+	box-shadow: 0 0 20px rgba(255, 0, 72, 0.6);
+	margin-bottom: 15px;
+	transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 .friend-card:hover .avatar img {
-  transform: rotate(-5deg) scale(1.1);
+	transform: rotate(-5deg) scale(1.1);
+	box-shadow: 0 0 30px rgba(255, 0, 72, 0.8);
 }
 
+/* ===== FRIEND INFO ===== */
 .friend-info h3 {
-  font-size: 1.3rem;
-  color: #fff;
-  margin-bottom: 5px;
+	font-size: 1.3rem;
+	color: #fff;
+	margin-bottom: 6px;
 }
 .friend-info p {
-  color: #aaa;
-  font-size: 0.9rem;
-  margin-bottom: 20px;
+	color: #aaa;
+	font-size: 0.9rem;
+	margin-bottom: 20px;
 }
 
-/* BUTTON STYLING */
+/* ===== BUTTONS ===== */
 .actions {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
 }
 .btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 10px 15px;
-  border: none;
-  border-radius: 10px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	padding: 10px 16px;
+	border: none;
+	border-radius: 10px;
+	font-weight: 600;
+	cursor: pointer;
+	transition: all 0.3s ease;
+	position: relative;
+	overflow: hidden;
 }
 .btn i {
-  margin-right: 8px;
+	margin-right: 8px;
+}
+.btn::after {
+	content: "";
+	position: absolute;
+	inset: 0;
+	background: rgba(255, 255, 255, 0.15);
+	opacity: 0;
+	transition: opacity 0.3s;
+}
+.btn:active::after {
+	opacity: 1;
 }
 .view-btn {
-  background: #ff0048;
-  color: white;
+	background: linear-gradient(90deg, #ff0048, #ff3369);
+	color: white;
 }
 .view-btn:hover {
-  background: #ff3369;
-  box-shadow: 0 0 15px rgba(255, 0, 72, 0.5);
+	background: linear-gradient(90deg, #ff3369, #ff0048);
+	box-shadow: 0 0 20px rgba(255, 0, 72, 0.5);
+	transform: translateY(-2px);
 }
 .remove-btn {
-  background: #222;
-  color: #ccc;
+	background: #222;
+	color: #ccc;
 }
 .remove-btn:hover {
-  background: #333;
-  color: white;
+	background: #333;
+	color: white;
 }
 
-/* TOAST NOTIFICATION */
+/* ===== TOAST ===== */
 .toast {
-  visibility: hidden;
-  min-width: 250px;
-  background-color: rgba(0, 0, 0, 0.85);
-  color: #fff;
-  text-align: center;
-  border-radius: 8px;
-  padding: 14px;
-  position: fixed;
-  left: 50%;
-  bottom: 30px;
-  transform: translateX(-50%);
-  font-size: 1rem;
-  z-index: 999;
-  opacity: 0;
-  transition: opacity 0.5s, bottom 0.5s;
+	position: fixed;
+	bottom: -80px;
+	right: 30px;
+	background: rgba(20, 20, 20, 0.9);
+	color: #fff;
+	padding: 14px 22px;
+	border-radius: 12px;
+	font-weight: 500;
+	backdrop-filter: blur(10px);
+	box-shadow: 0 0 25px rgba(255, 0, 72, 0.3);
+	border: 1px solid rgba(255, 255, 255, 0.1);
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	opacity: 0;
+	z-index: 2000;
+	transform: translateY(40px);
+	transition: all 0.5s cubic-bezier(0.25, 0.1, 0.25, 1);
 }
 .toast.show {
-  visibility: visible;
-  opacity: 1;
-  bottom: 50px;
+	bottom: 40px;
+	opacity: 1;
+	transform: translateY(0);
+}
+.toast.success {
+	border-left: 5px solid #00e676;
+	box-shadow: 0 0 25px rgba(0, 230, 118, 0.4);
+}
+.toast.error {
+	border-left: 5px solid #ff1744;
+	box-shadow: 0 0 25px rgba(255, 23, 68, 0.4);
+}
+.toast i {
+	font-size: 1.2rem;
 }
 
-/* ANIMATIONS */
+/* ===== MODAL OVERLAY ===== */
+.modal-overlay {
+	position: fixed;
+	inset: 0;
+	background: rgba(0, 0, 0, 0.75);
+	display: none;
+	justify-content: center;
+	align-items: center;
+	z-index: 3000;
+	animation: fadeIn 0.3s ease;
+}
+
+/* ===== MODAL ===== */
+.modal {
+	background: rgba(25, 25, 25, 0.95);
+	border-radius: 16px;
+	padding: 25px;
+	width: 320px;
+	text-align: center;
+	color: #fff;
+	backdrop-filter: blur(12px);
+	border: 1px solid rgba(255, 255, 255, 0.08);
+	box-shadow: 0 0 40px rgba(255, 0, 72, 0.3);
+	animation: scaleUp 0.25s ease;
+}
+.modal h3 {
+	font-size: 1.25rem;
+	margin-bottom: 10px;
+}
+.modal p {
+	color: #bbb;
+	font-size: 0.95rem;
+	margin-bottom: 22px;
+}
+.modal-buttons {
+	display: flex;
+	justify-content: space-between;
+	gap: 10px;
+}
+.btn.danger {
+	background: linear-gradient(90deg, #ff1744, #ff5252);
+	color: #fff;
+}
+.btn.danger:hover {
+	box-shadow: 0 0 20px rgba(255, 23, 68, 0.6);
+}
+.btn.cancel {
+	background: #444;
+	color: #fff;
+}
+.btn.cancel:hover {
+	background: #555;
+}
+
+/* ===== ANIMATIONS ===== */
 @keyframes fadeInDown {
-  from { opacity: 0; transform: translateY(-20px); }
-  to { opacity: 1; transform: translateY(0); }
+	from {
+		opacity: 0;
+		transform: translateY(-20px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
 }
 @keyframes fadeInUp {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
+	from {
+		opacity: 0;
+		transform: translateY(20px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
 }
 @keyframes slideUp {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
+	from {
+		opacity: 0;
+		transform: translateY(20px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+@keyframes slowZoom {
+	from {
+		transform: scale(1.1);
+	}
+	to {
+		transform: scale(1.15);
+	}
+}
+@keyframes fadeIn {
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+	}
+}
+@keyframes scaleUp {
+	from {
+		transform: scale(0.9);
+		opacity: 0;
+	}
+	to {
+		transform: scale(1);
+		opacity: 1;
+	}
+}
+.toast-confirm {
+	visibility: hidden;
+	position: fixed;
+	bottom: 20px;
+	left: 50%;
+	transform: translateX(-50%) translateY(30px);
+	background: rgba(20, 20, 20, 0.9);
+	color: #fff;
+	padding: 16px 24px;
+	border-radius: 14px;
+	box-shadow: 0 0 25px rgba(255, 0, 72, 0.3);
+	backdrop-filter: blur(12px);
+	z-index: 1500;
+	display: flex;
+	align-items: center;
+	gap: 16px;
+	opacity: 0;
+	transition: all 0.4s ease;
+	font-size: 0.95rem;
+	border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.toast-confirm.show {
+	visibility: visible;
+	opacity: 1;
+	transform: translateX(-50%) translateY(0);
+	bottom: 40px;
+}
+
+/* Icon beside message */
+.toast-confirm i {
+	color: #ff0048;
+	font-size: 1.3rem;
+	animation: pulseIcon 1.2s infinite ease-in-out;
+}
+
+/* Toast action buttons */
+.toast-actions {
+	display: flex;
+	gap: 10px;
+	margin-left: auto;
+}
+
+.toast-actions .btn {
+	border: none;
+	border-radius: 8px;
+	padding: 6px 14px;
+	font-weight: 600;
+	cursor: pointer;
+	transition: all 0.25s ease;
+	font-size: 0.9rem;
+}
+
+/* Confirm button */
+.toast-actions .btn.confirm {
+	background: #ff0048;
+	color: #fff;
+	box-shadow: 0 0 10px rgba(255, 0, 72, 0.3);
+}
+.toast-actions .btn.confirm:hover {
+	background: #ff3369;
+	box-shadow: 0 0 15px rgba(255, 0, 72, 0.6);
+}
+
+/* Cancel button */
+.toast-actions .btn.cancel {
+	background: transparent;
+	border: 1px solid rgba(255, 255, 255, 0.3);
+	color: #ccc;
+}
+.toast-actions .btn.cancel:hover {
+	background: rgba(255, 255, 255, 0.1);
+	color: #fff;
+}
+
+/* Animations */
+@keyframes pulseIcon {
+	0%,
+	100% {
+		transform: scale(1);
+		opacity: 1;
+	}
+	50% {
+		transform: scale(1.2);
+		opacity: 0.7;
+	}
 }

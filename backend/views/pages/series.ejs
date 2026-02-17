@@ -13,7 +13,7 @@
     <!-- ===== HERO SECTION ===== -->
     <section class="hero">
       <div class="overlay"></div>
-      <img src="<%= series.poster_url %>" class="bg-image" alt="<%= series.title %>" />
+      <img src="<%= series.landscape_poster_url %>" class="bg-image" alt="<%= series.title %>" />
 
       <div class="hero-content">
         <img src="<%= series.poster_url %>" class="poster" alt="poster" />
@@ -24,12 +24,25 @@
             <span class="tag"><%= series.age_rating || '16+' %></span>
           </h1>
 
-          <p class="meta">
-            <%= series.genre_name %> • 
-            <%= series.series_rating ? parseFloat(series.series_rating).toFixed(1) : "8.0" %>
-          </p>
+         <p class="meta">
+							<%= series.genre_name %> •
+							<span class="stars">
+								<% var rating10 = series.series_rating || 0; // rating out of 10
+								var rating5 = rating10 / 2; // convert to 5-star scale var
+								fullStars = Math.floor(rating5); var halfStar = (rating5 % 1) >=
+								0.5; %> <% for (var i = 0; i < fullStars; i++) { %>
+								<i class="fa-solid fa-star"></i>
+								<% } %> <% if (halfStar) { %>
+								<i class="fa-solid fa-star-half-stroke"></i>
+								<% } %> <% for (var i = fullStars + (halfStar ? 1 : 0); i < 5;
+								i++) { %>
+								<i class="fa-regular fa-star"></i>
+								<% } %>
+							</span>
+							<span class="rating-num"><%= (rating5).toFixed(1) %> / 5</span>
+						</p>
 
-          <p class="desc"><%= series.summary %></p>
+          <p class="desc"><%= series.summary %> Lorem ipsum dolor sit amet consectetur adipisicing elit. Optio quaerat nihil ipsa ea at pariatur nobis itaque soluta non sint, consequuntur quae, ex molestiae deserunt consequatur quo illum molestias culpa.</p>
 
           <div class="buttons">
             <button class="play-btn"><i class="fa fa-play"></i> Watch Trailer</button>
